@@ -45,8 +45,8 @@ services:
         max-size: "200k"
         max-file: "10"
 
-  cardano-node-ogmios:
-    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v5.5.8}_${CARDANO_NODE_VERSION:-1.35.4}-${NETWORK:-mainnet}
+  ogmios:
+    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v5.5.8}_${CARDANO_NODE_VERSION:-1.35.4}-${NETWORK:-mainnet}
     platform: ${PLATFORM:-linux/x86_64}
     logging:
       driver: "json-file"
@@ -57,7 +57,7 @@ services:
       - ${OGMIOS_PORT:-1337}:1337
     restart: on-failure
     volumes:
-      - ./data/cardano/cnode/db:/db:delegated
+      - $NODE_HOME/DB:/db:delegated
       - node-ipc:/ipc
       - ./config/network/${NETWORK:-mainnet}:/config/cardano-node
 
@@ -65,7 +65,7 @@ services:
     image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.0.5}
     command: [
       "--config", "/config/cardano-node/db-sync-config.json",
-      "--socket-path", "/node-ipc/node.socket"
+      "--socket-path", "$NODE_HOME/DB/socket"
     ]
     environment:
       - POSTGRES_HOST=postgres
@@ -73,7 +73,7 @@ services:
       - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
       - RESTORE_RECREATE_DB=N
     depends_on:
-      - cardano-node-ogmios
+      - ogmios
       - postgres
     secrets:
       - postgres_password
