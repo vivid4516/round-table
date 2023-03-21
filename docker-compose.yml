@@ -46,7 +46,7 @@ services:
         max-file: "10"
 
   ogmios:
-    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v5.5.8}_${CARDANO_NODE_VERSION:-1.35.4}-${NETWORK:-mainnet}
+    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v5.5.8}-${NETWORK:-mainnet}
     platform: ${PLATFORM:-linux/x86_64}
     logging:
       driver: "json-file"
