@@ -65,7 +65,7 @@ services:
     image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.0.5}
     command: [
       "--config", "/config/cardano-node/db-sync-config.json",
-      "--socket-path", "$NODE_HOME/DB/socket"
+      "--socket-path", "/home/cardano/cardano-my-node/DB/socket"
     ]
     environment:
       - POSTGRES_HOST=postgres
